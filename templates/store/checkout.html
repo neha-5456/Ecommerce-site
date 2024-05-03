@@ -1,0 +1,167 @@
+
+{% extends "base.html" %} 
+{% load static %} 
+{% block content %}
+
+
+<section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+ 
+
+
+<div class="row">
+	<aside class="col-lg-6">
+<div class="card">
+ <div   class="card-body" >
+ <h4 class="card=title m-4"> Billing Address </h4>
+
+
+ <form action="{% url 'placeorder'  %} " method="POST">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="col form-group">
+            <label for="fname">First Name </label>
+            <input type="text"  name="first_name" placeholder="please enter your first name" id="fname" class="form-control"   required />
+        </div>  
+        <div class="col form-group">
+            <label for="lname">Last Name </label>
+            <input type="text"  name="last_name" placeholder="please enter your last name" id="lname" class="form-control"  required  />
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col form-group">
+            <label for="email">Email </label>
+            <input type="email"  name="email" placeholder="please enter your name" id="fname" class="form-control"   required  />
+        </div>  
+        <div class="col form-group">
+            <label for="address">Address 1</label>
+            <input type="text"  name="address_line_1" placeholder="please enter your address" id="address" class="form-control"  required  />
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col form-group">
+            <label for="phone">phone number</label>
+            <input type="number"  name="phone" placeholder="please enter your phone number" id="phone" class="form-control"   required />
+        </div>  
+        <div class="col form-group">
+            <label for="pincode">Address 2 </label>
+            <input type="text"  name="address_line_2" placeholder="please enter your addre 2" id="zip_code" class="form-control"   required />
+
+        </div>
+    </div>  
+    <div class="form-row">
+        <div class="col form-group">
+            <label for="city">City</label>
+            <input type="text"  name="city" placeholder="please enter your city" id="city" class="form-control"  required  />
+        </div>
+    
+        <div class="col form-group">
+            <label for="state">State</label>
+            <input type="text"  name="state" placeholder="please enter your state" id="state" class="form-control"   required />
+        </div>  
+       
+    </div>
+
+    <div class="form-row">
+        <div class="col form-group">
+    <label for="country">country</label>
+    <input type="text"  name="country" placeholder="please enter your country" id="country" class="form-control"   required />
+</div>  
+<div class="col form-group">
+    <label for="ordernote">Order Note</label>
+    <input type="text"  name="order_note" id="order_note" class="form-control" required    />
+
+</div>
+</div>
+    
+ </div>
+
+</div> <!-- card.// -->
+
+	</aside> <!-- col.// -->
+	<aside class="col-lg-6">
+
+		<div class="card">
+            <table class="table table-borderless table-shopping-cart">
+            <thead class="text-muted">
+            <tr class="small text-uppercase">
+              <th scope="col">Product</th>
+              <th scope="col" width="120">Quantity</th>
+              <th scope="col" width="120">Price</th>
+             
+            </tr>
+            </thead>
+            <tbody>
+            
+            {% for cart_items  in cart_items  %}
+            <tr>
+                <td>
+                    <figure class="itemside align-items-center">
+                        <div class="aside"><img src="{{cart_items.product.images.url}}" class="img-sm"></div>
+                        <figcaption class="info">
+                            <a href="#" class="title text-dark">${{cart_items.product.product_name}}</a>
+                            <p class="text-muted small">
+                                    {% if cart_items.variations.all %}
+                                        {% for items in cart_items.variations.all  %}
+                                        
+                                           {{items.variation_category}} : {{ items.variation_value}} <br>
+                                    {% endfor %}
+                                    
+                                    
+                                    
+                                    {% endif %}
+                            
+                            </p>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td> 
+                    <!-- col.// -->
+                             <label for="cart_quantity">{{cart_items.quantity}}</label>
+                </td>
+                <td> 
+                    <div class="price-wrap"> 
+                        <var class="price"> {{cart_items.sub_total}}</var> 
+                        <small class="text-muted"> {{cart_items.product.price}}  </small> 
+                    </div> <!-- price-wrap .// -->
+                </td>
+              
+            </tr>
+            
+            
+            
+            {% endfor %}
+            </tbody>
+            </table>
+            
+
+		<div class="card-body">
+             <div class="checkout-total" style="margin-left: 18px;margin-bottom: 20px;">
+                <span> <b> Total : </b> {{total}} </span><br>
+                <span> <b> Tax : </b> {{tax}} </span><br>
+                <span><b> Grand Total :</b> {{grand_total}} </span><br>
+             </div>
+            
+			<button type="submit" name="submit" class="btn btn-primary btn-block"> Place Order </button>
+			<a href="/store" class="btn btn-light btn-block">Continue Shopping</a>
+        </form>
+		</div> <!-- card-body.// -->
+		</div> <!-- card.// -->
+
+</aside> <!-- col.// -->
+
+
+</div> <!-- row.// -->
+
+
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock content %}
