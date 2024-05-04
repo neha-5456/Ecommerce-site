@@ -38,9 +38,9 @@ def payment(request):
      #    data.variation = cart_item.variations
         data.ordered = True
         data.save()
-        items =  Cartitems.objects.get(id = data.id)
+        items =  Cartitems.objects.get(id = cart_item.id)
         product_variatios = items.variations.all()
-        data = OrderProduct.objects.get(id= data.product.id)
+        data = OrderProduct.objects.get(id= data.id)
         data.variation.set(product_variatios)
         data.save()
        
@@ -50,7 +50,7 @@ def payment(request):
         product.save()
          
         # clear cart 
-     #    Cartitems.objects.filter(user = request.user).delete()
+        Cartitems.objects.filter(user = request.user).delete()
     
         # send order recived email  to the customer  -- pending
 
@@ -126,7 +126,30 @@ def placeorder(request , total=0 , quantity = 0 ):
 
 
 def order_complete(request):
-     return render(request, 'order/order_complete.html')
+   order_number = request.GET.get('order_number')
+   trans_id =  request.GET.get('payment_id')
+   try :
+      order =  Order.objects.get(order_number = order_number ,is_order = True)
+      payment = Payment.objects.get(payment_id = trans_id )
+      orderproduct = OrderProduct.objects.filter(order_id = order.id)
+      subtotal = 0 
+      for item in orderproduct:
+         subtotal += item.product.price * item.quantity
+
+      context = {
+         'order': order ,
+         'orderproduct': orderproduct,
+         'order_number' : order.order_number,
+         'payment':payment,
+         'trans_id' : payment.payment_id,
+         'subtotal' : subtotal,
+      }
+      return render(request, 'order/order_complete.html', context)
+   except(Order.doesNotExits ,Payment.doesNotExits ):
+      return redirect('home')
+
+   
+   #   
 
 
 

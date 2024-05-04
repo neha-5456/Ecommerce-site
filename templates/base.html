@@ -85,13 +85,13 @@
                             'status': details.status
                         }),
                     })
-                    window.location.href = redirect_url + '?order_number='+ data.order_number + '&payment_id='+ data.trans_id
-                    //.then((response) => response.json())
-                    //.then((data) => {
-                      //console.log('success', data);
-                      //console.log('Transaction completed by ' + details.payer.name.given_name);
-                      // window.location.href = redirect_url + '?order_number='+ data.order_number + '&payment_id='+ data.trans_id
-                   // });
+                   //window.location.href = redirect_url + '?order_number='+ data.order_number + '&payment_id='+ data.trans_id
+                    .then((response) => response.json())
+                    .then((data) => {
+                      console.log('success', data);
+                      console.log('Transaction completed by ' + details.payer.name.given_name);
+                      window.location.href = redirect_url + '?order_number='+ data.order_number + '&payment_id='+ data.trans_id
+                    });
                 }
     
                 });
